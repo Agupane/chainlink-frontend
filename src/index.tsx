@@ -5,19 +5,22 @@ import ReactDOM from 'react-dom'
 import * as serviceWorker from './serviceWorker'
 import { MainWrapper } from './components/Common/MainWrapper'
 import { theme } from './theme'
-import { App } from './components/App'
+import { App } from './containers/App'
+import ExchangeContextProvider from './context/exchange'
 
 const NoMatch = () => <div>404 - nothing here!</div>
 
 const WrappedApp = (
     <BrowserRouter>
         <ThemeProvider theme={theme}>
-            <MainWrapper>
-                <Switch>
-                    <Route exact path="/" component={App} />
-                    <Route component={NoMatch} />
-                </Switch>
-            </MainWrapper>
+            <ExchangeContextProvider>
+                <MainWrapper>
+                    <Switch>
+                        <Route exact path="/" component={App} />
+                        <Route component={NoMatch} />
+                    </Switch>
+                </MainWrapper>
+            </ExchangeContextProvider>
         </ThemeProvider>
     </BrowserRouter>
 )

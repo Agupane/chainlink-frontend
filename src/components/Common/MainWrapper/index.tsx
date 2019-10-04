@@ -6,9 +6,6 @@ const MainWrapperStyled = styled.div`
     flex-direction: row;
     height: 100%;
     width: 100%;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
 `
 
 export const MainWrapper = (props: any) => {
