@@ -9,6 +9,7 @@ const ExchangeRateTopWrapper = styled.div`
     display: flex;
     flex-direction: column;
     margin-left: 10px;
+    max-width: 300px;
 `
 
 const UserBalance = styled.span`
@@ -17,6 +18,7 @@ const UserBalance = styled.span`
 
 const ContractAddress = styled.span`
     color: red;
+    flex-grow: 1;
 `
 
 const LinkBalance = styled.span`
@@ -34,7 +36,7 @@ export const ExchangeRateTop = () => {
                 <CopyText value={userAddress} canCopy={true} />
             </p>
             <p>
-                <UserBalance>Balance:</UserBalance> {userBalance}
+                <UserBalance>Balance (ETH):</UserBalance> {userBalance}
             </p>
             <p data-tip={oracleContractAddress}>
                 <ContractAddress>Contract address: </ContractAddress>

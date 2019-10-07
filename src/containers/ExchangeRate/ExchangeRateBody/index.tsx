@@ -31,8 +31,7 @@ export const ExchangeRateBody = () => {
             <Title>Exchange rate</Title>
             <SubTitle>USD {'<>'} RUB</SubTitle>
             <ExchangePrice>{price}</ExchangePrice>
-            <Date>{dateMoment.format('MM/DD/YYYY')}</Date>
-            <Date>{dateMoment.format('HH:mm A')}</Date>
+            <Date>{dateMoment.format('MM/DD/YYYY HH:mm A')}</Date>
             <Button onClick={updateExchangeHandler} backgroundColor={'#1a73e8'} color={'#ffffff'}>
                 Update
             </Button>
