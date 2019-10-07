@@ -13,6 +13,7 @@ const defaultValue: ExchangeContextType = {
         price: 0,
         lastEventBlock: 0,
     },
+    isLoading: true,
 }
 
 export const ExchangeContext = React.createContext({
@@ -29,6 +30,7 @@ const getInitialState = async (): Promise<ExchangeContextType> => {
         oracleContractAddress: await ethService.getLinkTokenAddress(),
         oracleContractBalance: await ethService.getOracleTokens(),
         lastTimeUpdateEvent: lastTimeUpdateEvent ? lastTimeUpdateEvent : defaultValue.lastTimeUpdateEvent,
+        isLoading: false,
     }
 }
 
@@ -50,9 +52,17 @@ const ExchangeContextProvider = (props: any) => {
             const { lastEventBlock } = lastTimeUpdateEvent
             // The first time will be from block 0 to latest block, the second time from the last block I asked to the lastest block
             const exchangeRate = await ethService.getLastTimePriceUpdated(lastEventBlock)
+            let showSpinnerLoading = exchangeState.isLoading
+            if (exchangeRate && exchangeState.isLoading) {
+                // If we got an update on the price and the spinner is loading, disables it
+                showSpinnerLoading = false
+            }
             const newState = {
                 ...exchangeState,
+                userBalance: await ethService.getCurrentBalance(),
+                oracleContractBalance: await ethService.getOracleTokens(),
                 lastTimeUpdateEvent: exchangeRate ? exchangeRate : exchangeState.lastTimeUpdateEvent,
+                isLoading: showSpinnerLoading,
             }
             setExchangeState(newState)
         }, POLLING_UPDATE_TIME)
@@ -63,13 +73,23 @@ const ExchangeContextProvider = (props: any) => {
     }, [exchangeState])
 
     const updateExchangeStateHandler = async () => {
-        console.log('Updating state')
+        console.log('Updating exchange state...')
         try {
+            setLoadingState(true)
             const updateResult = await ethService.updateOraclePrice()
             console.log('Price updated successfully', updateResult)
         } catch (error) {
             console.error('Error updating price: ', error)
+            setLoadingState(false)
         }
+    }
+
+    const setLoadingState = (loading: boolean) => {
+        console.log('Updating loading state: ', loading)
+        setExchangeState({
+            ...exchangeState,
+            isLoading: loading,
+        })
     }
 
     return (

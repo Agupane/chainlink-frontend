@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { ExchangeContext } from '../../../context/exchange'
 import styled from 'styled-components'
-import { HexAddr } from '../../Common/HexAddr'
+import { HexAddr } from '../../../components/Common/HexAddr'
 import ReactTooltip from 'react-tooltip'
-import { CopyText } from '../../Common/CopyText'
+import { CopyText } from '../../../components/Common/CopyText'
 
 const ExchangeRateTopWrapper = styled.div`
     display: flex;

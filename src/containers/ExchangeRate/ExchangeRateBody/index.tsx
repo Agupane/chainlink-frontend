@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import { ExchangeContext } from '../../../context/exchange'
 import styled from 'styled-components'
-import { Button } from '../../Common/Button'
+import { Button } from '../../../components/Common/Button'
+import moment from 'moment'
 
 const ExchangeRateBodyWrapper = styled.div`
     display: flex;
@@ -22,15 +23,16 @@ export const ExchangeRateBody = () => {
     const { lastTimeUpdateEvent } = exchangeContext
     const { price, timestamp } = lastTimeUpdateEvent
     const updateExchangeHandler = () => {
-        console.log('Updating value')
         exchangeContext.updateExchangeState()
     }
+    const dateMoment = moment(timestamp)
     return (
         <ExchangeRateBodyWrapper>
             <Title>Exchange rate</Title>
             <SubTitle>USD {'<>'} RUB</SubTitle>
             <ExchangePrice>{price}</ExchangePrice>
-            <Date>{timestamp.toDateString()}</Date>
+            <Date>{dateMoment.format('MM/DD/YYYY')}</Date>
+            <Date>{dateMoment.format('HH:mm A')}</Date>
             <Button onClick={updateExchangeHandler} backgroundColor={'#1a73e8'} color={'#ffffff'}>
                 Update
             </Button>

@@ -5,9 +5,10 @@ import ReactDOM from 'react-dom'
 import * as serviceWorker from './serviceWorker'
 import { MainWrapper } from './components/Common/MainWrapper'
 import { theme } from './theme'
-import { App } from './containers/App'
 import ExchangeContextProvider from './context/exchange'
 import './assets/styles/index.css'
+import { Spinner } from './components/Common/Spinner'
+import { ExchangeRate } from './containers/ExchangeRate'
 
 const NoMatch = () => <div>404 - nothing here!</div>
 
@@ -15,12 +16,14 @@ const WrappedApp = (
     <BrowserRouter>
         <ThemeProvider theme={theme}>
             <ExchangeContextProvider>
-                <MainWrapper>
-                    <Switch>
-                        <Route exact path="/" component={App} />
-                        <Route component={NoMatch} />
-                    </Switch>
-                </MainWrapper>
+                <Spinner>
+                    <MainWrapper>
+                        <Switch>
+                            <Route exact path="/" component={ExchangeRate} />
+                            <Route component={NoMatch} />
+                        </Switch>
+                    </MainWrapper>
+                </Spinner>
             </ExchangeContextProvider>
         </ThemeProvider>
     </BrowserRouter>
