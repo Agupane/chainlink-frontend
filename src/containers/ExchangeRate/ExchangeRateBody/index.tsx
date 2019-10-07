@@ -3,11 +3,14 @@ import { ExchangeContext } from '../../../context/exchange'
 import styled from 'styled-components'
 import { Button } from '../../../components/Common/Button'
 import moment from 'moment'
+import { PriceChart } from '../../../components/Chart'
 
 const ExchangeRateBodyWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 100%;
+    flex-grow: 1;
 `
 
 const Title = styled.h2``
@@ -18,6 +21,10 @@ const ExchangePrice = styled.h4``
 
 const Date = styled.p``
 
+const Chart = styled.div`
+    width: 80%;
+`
+
 export const ExchangeRateBody = () => {
     const exchangeContext = useContext(ExchangeContext)
     const { lastTimeUpdateEvent } = exchangeContext
@@ -26,6 +33,7 @@ export const ExchangeRateBody = () => {
         exchangeContext.updateExchangeState()
     }
     const dateMoment = moment(timestamp)
+
     return (
         <ExchangeRateBodyWrapper>
             <Title>Exchange rate</Title>
@@ -35,6 +43,9 @@ export const ExchangeRateBody = () => {
             <Button onClick={updateExchangeHandler} backgroundColor={'#1a73e8'} color={'#ffffff'}>
                 Update
             </Button>
+            <Chart>
+                <PriceChart />
+            </Chart>
         </ExchangeRateBodyWrapper>
     )
 }

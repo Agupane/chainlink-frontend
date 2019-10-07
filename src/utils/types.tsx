@@ -5,6 +5,7 @@ export interface ExchangeContextType {
     oracleContractBalance: string
     lastTimeUpdateEvent: PriceUpdatedEventType
     isLoading: boolean
+    allEvents: PriceUpdatedEventType[]
 }
 
 export interface PriceUpdatedEventType {

@@ -14,6 +14,7 @@ const defaultValue: ExchangeContextType = {
         lastEventBlock: 0,
     },
     isLoading: true,
+    allEvents: [],
 }
 
 export const ExchangeContext = React.createContext({
@@ -31,6 +32,7 @@ const getInitialState = async (): Promise<ExchangeContextType> => {
         oracleContractBalance: await ethService.getOracleTokens(),
         lastTimeUpdateEvent: lastTimeUpdateEvent ? lastTimeUpdateEvent : defaultValue.lastTimeUpdateEvent,
         isLoading: false,
+        allEvents: await ethService.getHistoricPrices(),
     }
 }
 
@@ -63,6 +65,7 @@ const ExchangeContextProvider = (props: any) => {
                 oracleContractBalance: await ethService.getOracleTokens(),
                 lastTimeUpdateEvent: exchangeRate ? exchangeRate : exchangeState.lastTimeUpdateEvent,
                 isLoading: showSpinnerLoading,
+                allEvents: await ethService.getHistoricPrices(),
             }
             setExchangeState(newState)
         }, POLLING_UPDATE_TIME)

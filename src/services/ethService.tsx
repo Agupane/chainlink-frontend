@@ -61,6 +61,23 @@ export class EthService {
         })
     }
 
+    getHistoricPrices = async (): Promise<PriceUpdatedEventType[]> => {
+        const lastPriceUpdatedEvents: EventLog[] = await this.oracleContract.getPastEvents('PriceUpdated', {
+            fromBlock: 0,
+            toBlock: 'latest',
+        })
+        const historicPrices = lastPriceUpdatedEvents.map(item => {
+            const price = tokenAmountInUnits(item.returnValues.price, 2)
+            const timestamp = new Date(item.returnValues.timestamp * 1000)
+            return {
+                lastEventBlock: item.blockNumber,
+                price,
+                timestamp,
+            }
+        })
+        return historicPrices
+    }
+
     getLastTimePriceUpdated = async (startBlock: number = 0): Promise<PriceUpdatedEventType | null> => {
         const currentLastBlock = await this.web3.eth.getBlockNumber()
         console.log(`Getting last time price update events from: ${startBlock} to ${currentLastBlock}`)
