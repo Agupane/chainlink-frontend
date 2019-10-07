@@ -3,7 +3,8 @@ import { ExchangeContext } from '../../../context/exchange'
 
 export const ExchangeRateBody = () => {
     const exchangeContext = useContext(ExchangeContext)
-    const { exchangeRate, timestamp } = exchangeContext
+    const { lastTimeUpdateEvent } = exchangeContext
+    const { price, timestamp } = lastTimeUpdateEvent
     const updateExchangeHandler = () => {
         console.log('Updating value')
         exchangeContext.updateExchangeState()
@@ -12,7 +13,7 @@ export const ExchangeRateBody = () => {
         <>
             <h1>Exchange rate</h1>
             <h2>USD {'<>'} RUB</h2>
-            <h3>{exchangeRate}</h3>
+            <h3>{price}</h3>
             <p>{timestamp.toDateString()}</p>
             <button onClick={updateExchangeHandler}>Update</button>
         </>

@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
-import { ExchangeContexType } from '../utils/types'
+import React, { useEffect, useState } from 'react'
 import { getEthService } from '../services/ethService'
+import { ExchangeContextType } from '../utils/types'
+import { POLLING_UPDATE_TIME } from '../utils/constants'
 
-const defaultValue: ExchangeContexType = {
-    oracleContractAddress: '',
-    oracleContractBalance: '',
-    exchangeRate: 0,
-    network: '',
-    timestamp: new Date(),
+const defaultValue: ExchangeContextType = {
     userAddress: '',
     userBalance: '',
+    oracleContractAddress: '',
+    oracleContractBalance: '',
+    lastTimeUpdateEvent: {
+        timestamp: new Date(),
+        price: 0,
+        lastEventBlock: 0,
+    },
 }
 
 export const ExchangeContext = React.createContext({
@@ -17,20 +20,55 @@ export const ExchangeContext = React.createContext({
     updateExchangeState: () => {},
 })
 
+const getInitialState = async (): Promise<ExchangeContextType> => {
+    const ethService = getEthService()
+    const lastTimeUpdateEvent = await ethService.getLastTimePriceUpdated()
+    return {
+        userAddress: ethService.getUserAddress(),
+        userBalance: await ethService.getCurrentBalance(),
+        oracleContractAddress: await ethService.getLinkTokenAddress(),
+        oracleContractBalance: await ethService.getOracleTokens(),
+        lastTimeUpdateEvent: lastTimeUpdateEvent ? lastTimeUpdateEvent : defaultValue.lastTimeUpdateEvent,
+    }
+}
+
 const ExchangeContextProvider = (props: any) => {
     const ethService = getEthService()
-
     const [exchangeState, setExchangeState] = useState(defaultValue)
+
+    useEffect(() => {
+        getInitialState().then(initialState => {
+            setExchangeState(initialState)
+        })
+    }, [])
+
+    useEffect(() => {
+        const timeout = setTimeout(async () => {
+            console.log('Updating exchange rate...')
+            const { lastTimeUpdateEvent } = exchangeState
+            const { lastEventBlock } = lastTimeUpdateEvent
+            // The first time will be from block 0 to latest block, the second time from the last block I asked to the lastest block
+            const exchangeRate = await ethService.getLastTimePriceUpdated(lastEventBlock)
+            const newState = {
+                ...exchangeState,
+                lastTimeUpdateEvent: exchangeRate ? exchangeRate : exchangeState.lastTimeUpdateEvent,
+            }
+            setExchangeState(newState)
+        }, POLLING_UPDATE_TIME)
+
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [exchangeState])
 
     const updateExchangeStateHandler = async () => {
         console.log('Updating state')
-        const newStateExchange = {
-            ...exchangeState,
-            userBalance: await ethService.getCurrentBalance(),
-            userAddress: ethService.getUserAddress(),
-            exchangeRate: await ethService.getCurrentExchangePrice(),
+        try {
+            const updateResult = await ethService.updateOraclePrice()
+            console.log('Price updated successfully', updateResult)
+        } catch (error) {
+            console.error('Error updating price: ', error)
         }
-        setExchangeState(newStateExchange)
     }
 
     return (

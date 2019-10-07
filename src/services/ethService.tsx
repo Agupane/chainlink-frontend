@@ -3,6 +3,9 @@ import { Account } from 'web3/eth/accounts'
 import ChainlinkContract from '../utils/abis/ChainlinkConsumer.json'
 import ERC20Contract from '../utils/abis/ERC20.json'
 import { CLIENT_PK, ORACLE_ADDRESS, RPC_URL } from '../utils/constants'
+import { tokenAmountInUnits } from '../utils/tokens'
+import { EventLog } from 'web3/types'
+import { PriceUpdatedEventType } from '../utils/types'
 
 export class EthService {
     private web3: Web3
@@ -16,7 +19,9 @@ export class EthService {
     }
 
     getCurrentBalance = async (): Promise<string> => {
-        return await this.web3.eth.getBalance('0x0dc0dfD22C6Beab74672EADE5F9Be5234AAa43cC')
+        let balance = await this.web3.eth.getBalance(this.account.address)
+        balance = this.web3.utils.fromWei(balance)
+        return balance
     }
 
     getUserAddress = (): string => {
@@ -28,7 +33,8 @@ export class EthService {
     }
 
     getCurrentExchangePrice = async (): Promise<number> => {
-        return await this.oracleContract.methods.currentPrice().call()
+        const exchangePrice = await this.oracleContract.methods.currentPrice().call()
+        return tokenAmountInUnits(exchangePrice, 2)
     }
 
     generateErc20Contract = async () => {
@@ -40,7 +46,8 @@ export class EthService {
         if (!this.erc20Contract) {
             await this.generateErc20Contract()
         }
-        return this.erc20Contract.methods.balanceOf(ORACLE_ADDRESS).call()
+        const balance = await this.erc20Contract.methods.balanceOf(ORACLE_ADDRESS).call()
+        return tokenAmountInUnits(balance, 18)
     }
 
     updateOraclePrice = async (): Promise<any> => {
@@ -52,6 +59,25 @@ export class EthService {
             from: address,
             gas: gasLimit,
         })
+    }
+
+    getLastTimePriceUpdated = async (startBlock: number = 0): Promise<PriceUpdatedEventType | null> => {
+        const currentLastBlock = await this.web3.eth.getBlockNumber()
+        console.log(`Getting last time price update events from: ${startBlock} to ${currentLastBlock}`)
+        const lastPriceUpdatedEvents: EventLog[] = await this.oracleContract.getPastEvents('PriceUpdated', {
+            fromBlock: startBlock,
+            toBlock: currentLastBlock,
+        })
+        const lastEvent = lastPriceUpdatedEvents.slice(-1)[0]
+        if (lastEvent) {
+            const price = tokenAmountInUnits(lastEvent.returnValues.price, 2)
+            return {
+                lastEventBlock: currentLastBlock,
+                price,
+                timestamp: new Date(lastEvent.returnValues.timestamp * 1000),
+            }
+        }
+        return null
     }
 }
 

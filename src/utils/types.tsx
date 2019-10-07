@@ -1,9 +1,13 @@
-export interface ExchangeContexType {
+export interface ExchangeContextType {
     userAddress: string
     userBalance: string
     oracleContractAddress: string
     oracleContractBalance: string
-    network: string
-    exchangeRate: number
+    lastTimeUpdateEvent: PriceUpdatedEventType
+}
+
+export interface PriceUpdatedEventType {
     timestamp: Date
+    price: number
+    lastEventBlock: number
 }
