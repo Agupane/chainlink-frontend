@@ -43,6 +43,7 @@ const ExchangeContextProvider = (props: any) => {
     }, [])
 
     useEffect(() => {
+        const ethService = getEthService()
         const timeout = setTimeout(async () => {
             console.log('Updating exchange rate...')
             const { lastTimeUpdateEvent } = exchangeState

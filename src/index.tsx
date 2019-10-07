@@ -7,6 +7,7 @@ import { MainWrapper } from './components/Common/MainWrapper'
 import { theme } from './theme'
 import { App } from './containers/App'
 import ExchangeContextProvider from './context/exchange'
+import './assets/styles/index.css'
 
 const NoMatch = () => <div>404 - nothing here!</div>
 

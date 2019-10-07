@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-
 const MainWrapperStyled = styled.div`
     display: flex;
-    flex-direction: row;
-    height: 100%;
-    width: 100%;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
 `
 
 export const MainWrapper = (props: any) => {

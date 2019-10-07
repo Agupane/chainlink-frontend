@@ -1,9 +1,17 @@
 import React from 'react'
 import { ExchangeRateTop } from './ExchangeRateTop'
 import { ExchangeRateBody } from './ExchangeRateBody'
+import styled from 'styled-components'
+
+const ExchangeRateWrapper = styled.div`
+    display: flex;
+    flexgrow: 1;
+    flex-flow: column;
+`
+
 export const ExchangeRate = () => (
-    <div>
+    <ExchangeRateWrapper>
         <ExchangeRateTop />
         <ExchangeRateBody />
-    </div>
+    </ExchangeRateWrapper>
 )
