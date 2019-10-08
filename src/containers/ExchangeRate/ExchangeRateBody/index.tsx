@@ -24,6 +24,7 @@ const Date = styled.p``
 
 const Chart = styled.div`
     width: 80%;
+    margin-top: 15px;
 `
 
 export const ExchangeRateBody = () => {
