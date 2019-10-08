@@ -59,13 +59,17 @@ const ExchangeContextProvider = (props: any) => {
                 // If we got an update on the price and the spinner is loading, disables it
                 showSpinnerLoading = false
             }
+            const allEvents = exchangeState.allEvents
+            if (exchangeRate) {
+                allEvents.push(exchangeRate)
+            }
             const newState = {
                 ...exchangeState,
                 userBalance: await ethService.getCurrentBalance(),
                 oracleContractBalance: await ethService.getOracleTokens(),
                 lastTimeUpdateEvent: exchangeRate ? exchangeRate : exchangeState.lastTimeUpdateEvent,
                 isLoading: showSpinnerLoading,
-                allEvents: await ethService.getHistoricPrices(),
+                allEvents,
             }
             setExchangeState(newState)
         }, POLLING_UPDATE_TIME)

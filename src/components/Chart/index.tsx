@@ -13,9 +13,6 @@ const initialValues = {
             },
         },
         xaxis: {
-            //  categories: [0],
-            min: 0,
-            max: 10,
             labels: {
                 show: false,
             },
@@ -28,7 +25,6 @@ const initialValues = {
     series: [
         {
             name: 'USD<>RUB',
-            data: ['0', '1'],
         },
     ],
     chart: {
@@ -46,35 +42,28 @@ export const PriceChart = () => {
     const exchangeContext = useContext(ExchangeContext)
     const { allEvents } = exchangeContext
     useEffect(() => {
-        const prices = allEvents.map(event => {
-            return event.price
-        })
-
-        const seriesTime = allEvents.map((event, index) => {
+        const seriesData = allEvents.map(event => {
             const dateMoment = moment(event.timestamp)
-            //return dateMoment.format('MM/DD/YY')
-            return index
+            const date = dateMoment.format('MM/DD/YY')
+            return {
+                x: date,
+                y: event.price,
+            }
         })
 
-        // @ts-ignore
         setChartValues({
             options: {
-                chart: chartValues.options.chart,
-                xaxis: {
-                    categories: seriesTime,
-                    ...chartValues.options.xaxis,
-                },
-                yaxis: { ...chartValues.options.yaxis },
+                ...chartValues.options,
             },
             series: [
                 {
                     name: 'USD<>RUB',
-                    data: prices,
+                    // @ts-ignore
+                    data: seriesData,
                 },
             ],
             chart: {
-                width: '100%',
-                height: '100%',
+                ...chartValues.chart,
             },
         })
     }, [allEvents])
