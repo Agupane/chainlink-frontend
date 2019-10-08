@@ -28,7 +28,7 @@ const getInitialState = async (): Promise<ExchangeContextType> => {
     return {
         userAddress: ethService.getUserAddress(),
         userBalance: await ethService.getCurrentBalance(),
-        oracleContractAddress: await ethService.getLinkTokenAddress(),
+        oracleContractAddress: await ethService.getConsumerContractAddress(),
         oracleContractBalance: await ethService.getOracleTokens(),
         lastTimeUpdateEvent: lastTimeUpdateEvent ? lastTimeUpdateEvent : defaultValue.lastTimeUpdateEvent,
         isLoading: false,

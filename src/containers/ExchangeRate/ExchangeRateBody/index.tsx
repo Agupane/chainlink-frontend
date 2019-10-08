@@ -11,6 +11,7 @@ const ExchangeRateBodyWrapper = styled.div`
     align-items: center;
     max-width: 100%;
     flex-grow: 1;
+    margin-top: 10px;
 `
 
 const Title = styled.h2``

@@ -32,6 +32,10 @@ export class EthService {
         return await this.oracleContract.methods.getChainlinkToken().call()
     }
 
+    getConsumerContractAddress = async (): Promise<any> => {
+        return ORACLE_ADDRESS
+    }
+
     getCurrentExchangePrice = async (): Promise<number> => {
         const exchangePrice = await this.oracleContract.methods.currentPrice().call()
         return tokenAmountInUnits(exchangePrice, 2)
