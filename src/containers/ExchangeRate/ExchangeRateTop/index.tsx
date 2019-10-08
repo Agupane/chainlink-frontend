@@ -14,66 +14,63 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     root: {
+        width: '100%',
         marginTop: theme.spacing(3),
+        overflowX: 'auto',
     },
     table: {},
-    columnLeft: {
-        display: 'flex',
+    column: {
+        padding: '6px',
     },
-    columnRight: {},
 }))
-
-const TableWrapper = styled.div``
 
 export const ExchangeRateTop = () => {
     const exchangeContext = useContext(ExchangeContext)
     const { userBalance, userAddress, oracleContractBalance, oracleContractAddress } = exchangeContext
     const classes = useStyles()
     return (
-        <TableWrapper>
-            <Paper className={classes.root}>
-                <Table className={classes.table}>
-                    <TableBody>
-                        <TableRow key={1}>
-                            <TableCell component="th" scope="row" className={classes.columnLeft}>
-                                <strong>User address:</strong>
-                            </TableCell>
-                            <TableCell className={classes.columnRight} data-tip={userAddress}>
-                                <HexAddr>{userAddress}</HexAddr>
-                                <CopyText value={userAddress} canCopy={true} />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow key={2}>
-                            <TableCell component="th" scope="row" className={classes.columnLeft}>
-                                <strong>Balance (ETH):</strong>
-                            </TableCell>
-                            <TableCell className={classes.columnRight}>{userBalance}</TableCell>
-                        </TableRow>
-                        <TableRow key={3}>
-                            <TableCell component="th" scope="row" className={classes.columnLeft}>
-                                <strong>Contract address:</strong>
-                            </TableCell>
-                            <TableCell className={classes.columnRight} data-tip={oracleContractAddress}>
-                                <HexAddr>{oracleContractAddress}</HexAddr>
-                                <CopyText value={oracleContractAddress} canCopy={true} />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow key={4}>
-                            <TableCell component="th" scope="row" className={classes.columnLeft}>
-                                <strong>Link balance:</strong>
-                            </TableCell>
-                            <TableCell className={classes.columnRight}>{oracleContractBalance}</TableCell>
-                        </TableRow>
-                        <TableRow key={5}>
-                            <TableCell component="th" scope="row" className={classes.columnLeft}>
-                                <strong>Network:</strong>
-                            </TableCell>
-                            <TableCell className={classes.columnRight}>Kovan</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <ReactTooltip />
-            </Paper>
-        </TableWrapper>
+        <Paper className={classes.root}>
+            <Table className={classes.table}>
+                <TableBody>
+                    <TableRow key={1}>
+                        <TableCell component="th" scope="row" className={classes.column}>
+                            <strong>User address:</strong>
+                        </TableCell>
+                        <TableCell className={classes.column} data-tip={userAddress}>
+                            <HexAddr>{userAddress}</HexAddr>
+                            <CopyText value={userAddress} canCopy={true} />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow key={2}>
+                        <TableCell component="th" scope="row" className={classes.column}>
+                            <strong>Balance (ETH):</strong>
+                        </TableCell>
+                        <TableCell className={classes.column}>{userBalance}</TableCell>
+                    </TableRow>
+                    <TableRow key={3}>
+                        <TableCell component="th" scope="row" className={classes.column}>
+                            <strong>Contract address:</strong>
+                        </TableCell>
+                        <TableCell className={classes.column} data-tip={oracleContractAddress}>
+                            <HexAddr>{oracleContractAddress}</HexAddr>
+                            <CopyText value={oracleContractAddress} canCopy={true} />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow key={4}>
+                        <TableCell component="th" scope="row" className={classes.column}>
+                            <strong>Link balance:</strong>
+                        </TableCell>
+                        <TableCell className={classes.column}>{oracleContractBalance}</TableCell>
+                    </TableRow>
+                    <TableRow key={5}>
+                        <TableCell component="th" scope="row" className={classes.column}>
+                            <strong>Network:</strong>
+                        </TableCell>
+                        <TableCell className={classes.column}>Kovan</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            <ReactTooltip />
+        </Paper>
     )
 }
